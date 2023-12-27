@@ -1,0 +1,117 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class NQueens
+{
+public:
+    void solveNQueens(int n)
+    {
+        char **board = new char *[n];
+        for (int i = 0; i < n; ++i)
+        {
+            board[i] = new char[n];
+            for (int j = 0; j < n; ++j)
+            {
+                board[i][j] = '.';
+            }
+        }
+
+        solveNQueensRecursive(board, 0, n);
+
+        // Очистка памяти
+        for (int i = 0; i < n; ++i)
+        {
+            delete[] board[i];
+        }
+        delete[] board;
+    }
+
+private:
+    void solveNQueensRecursive(char **board, int row, int n)
+    {
+        if (row == n)
+        {
+            printBoard(board, n);
+            return;
+        }
+
+        for (int col = 0; col < n; ++col)
+        {
+            if (isValid(board, row, col, n))
+            {
+                board[row][col] = 'Q';
+                solveNQueensRecursive(board, row + 1, n);
+                board[row][col] = '.';
+            }
+        }
+    }
+
+    bool isValid(char **board, int row, int col, int n)
+    {
+        // Проверка вертикали и горизонтали
+        for (int i = 0; i < row; ++i)
+        {
+            if (board[i][col] == 'Q')
+            {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < col; ++i)
+        {
+            if (board[row][i] == 'Q')
+            {
+                return false;
+            }
+        }
+
+        // Проверка диагоналей
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; --i, --j)
+        {
+            if (board[i][j] == 'Q')
+            {
+                return false;
+            }
+        }
+
+        for (int i = row - 1, j = col + 1; i >= 0 && j < n; --i, ++j)
+        {
+            if (board[i][j] == 'Q')
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void printBoard(char **board, int n)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                cout << board[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+};
+
+int main()
+{
+    setlocale(LC_ALL, "RU");
+
+    NQueens nQueens;
+
+    int n;
+    cout << "Введите размер шахматной доски: ";
+    cin >> n;
+
+    nQueens.solveNQueens(n);
+
+    return 0;
+}
