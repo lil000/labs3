@@ -1,0 +1,169 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct TovarNode {
+    wstring name; // Используем wstring вместо string для поддержки Unicode
+    TovarNode* next;
+};
+
+TovarNode* head = nullptr;
+
+void addFirst(wstring name) {
+    TovarNode* newNode = new TovarNode;
+    newNode->name = name;
+    newNode->next = head;
+    head = newNode;
+}
+
+void addLast(wstring name) {
+    TovarNode* newNode = new TovarNode;
+    newNode->name = name;
+    newNode->next = nullptr;
+
+    if (head == nullptr) {
+        head = newNode;
+        return;
+    }
+
+    TovarNode* current = head;
+    while (current->next != nullptr) {
+        current = current->next;
+    }
+    current->next = newNode;
+}
+
+void addAfter(wstring name, wstring afterName) {
+    TovarNode* newNode = new TovarNode;
+    newNode->name = name;
+
+    if (head == nullptr) {
+        wcout << L"Список пуст" << endl;
+        return;
+    }
+
+    TovarNode* current = head;
+    while (current != nullptr && current->name != afterName) {
+        current = current->next;
+    }
+
+    if (current == nullptr) {
+        wcout << L"Элемент не найден" << endl;
+        return;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+}
+
+void addBefore(wstring name, wstring beforeName) {
+    TovarNode* newNode = new TovarNode;
+    newNode->name = name;
+
+    if (head == nullptr) {
+        wcout << L"Список пуст" << endl;
+        return;
+    }
+
+    if (head->name == beforeName) {
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    TovarNode* current = head;
+    while (current->next != nullptr && current->next->name != beforeName) {
+        current = current->next;
+    }
+
+    if (current->next == nullptr) {
+        wcout << L"Элемент не найден" << endl;
+        return;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+}
+
+void deleteTovar(wstring name) {
+    if (head == nullptr) {
+        wcout << L"Список пуст" << endl;
+        return;
+    }
+
+    if (head->name == name) {
+        TovarNode* temp = head;
+        head = head->next;
+        delete temp;
+        return;
+    }
+
+    TovarNode* current = head;
+    while (current->next != nullptr && current->next->name != name) {
+        current = current->next;
+    }
+
+    if (current->next == nullptr) {
+        wcout << L"Элемент не найден" << endl;
+        return;
+    }
+
+    TovarNode* temp = current->next;
+    current->next = current->next->next;
+    delete temp;
+}
+
+void printList() {
+    if (head == nullptr) {
+        wcout << L"Список пуст" << endl;
+        return;
+    }
+
+    TovarNode* current = head;
+    while (current != nullptr) {
+        wcout << current->name << L" ";
+        current = current->next;
+    }
+    wcout << endl;
+}
+
+int main() {
+    wstring command, name, afterName, beforeName;
+
+    while (true) {
+        wcout << L"Введите команду (add_first, add_last, add_after, add_before, delete, print, exit): ";
+        getline(wcin, command); // Используем getline вместо cin >> для чтения строк с пробелами
+
+        if (command == L"add_first") {
+            wcout << L"Введите название: ";
+            getline(wcin, name);
+            addFirst(name);
+        } else if (command == L"add_last") {
+            wcout << L"Введите название: ";
+            getline(wcin, name);
+            addLast(name);
+        } else if (command == L"add_after") {
+            wcout << L"Введите название и после какого элемента: ";
+            getline(wcin, name);
+            getline(wcin, afterName);
+            addAfter(name, afterName);
+        } else if (command == L"add_before") {
+            wcout << L"Введите название и перед каким элементом: ";
+            getline(wcin, name);
+            getline(wcin, beforeName);
+            addBefore(name, beforeName);
+        } else if (command == L"delete") {
+            wcout << L"Введите название: ";
+            getline(wcin, name);
+            deleteTovar(name);
+        } else if (command == L"print") {
+            printList();
+        } else if (command == L"exit") {
+            break;
+        } else {
+            wcout << L"Неверная команда" << endl;
+        }
+    }
+
+    return 0;
+}
