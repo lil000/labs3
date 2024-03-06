@@ -1,0 +1,121 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct tovar
+{
+    int amount;
+    string name;
+    float price; 
+    tovar* next;
+};
+
+void AddFirst(tovar* &tlist, string n, float pr, int am)
+{
+    tovar *tmp = new tovar;
+    tmp->name = n; 
+    tmp->price = pr;
+    tmp->amount = am;
+    tmp->next = tlist;
+    tlist = tmp;
+}
+
+void AddLast(tovar* &tlist, string n, float pr, int am)
+{
+    if (tlist == NULL){
+        AddFirst(tlist, n, pr, am);
+        return;
+    }
+
+    tovar *tmp = tlist;
+    while (tmp->next != NULL)
+    {
+        tmp = tmp->next;
+    }
+
+    tovar *newtovar = new tovar;
+    newtovar->name = n;
+    newtovar->price = pr;
+    newtovar->amount = am;
+    newtovar->next = NULL;
+    tmp->next = newtovar;
+}
+
+void AddAfter(tovar *tlist, string n, float pr, int am, string nafter)
+{
+    tovar *tmp = tlist;
+    while (tmp != NULL && tmp->name != nafter)
+    {
+        tmp = tmp->next;
+    }
+
+    if (tmp == NULL)
+    {
+        cout << "Item " << nafter << " not found." << endl;
+        return;
+    }
+
+    tovar *newtovar = new tovar;
+    newtovar->name = n;
+    newtovar->price = pr;
+    newtovar->amount = am;
+    newtovar->next = tmp->next;
+    tmp->next = newtovar;
+}
+
+void PrintList(tovar *tlist)
+{
+    tovar *tmp = tlist;
+    while (tmp != NULL)
+    {
+        cout << tmp->name << " - " << tmp->price << " - " << tmp->amount << endl;
+        tmp = tmp->next;
+    }
+}
+
+void DelTovar(tovar* &tlist, string n)
+{
+    tovar *tmp = tlist;
+    tovar *prev = NULL;
+
+    if (tmp != NULL && tmp->name == n)
+    {
+        tlist = tmp->next;
+        delete tmp;
+        return;
+    }
+
+    while (tmp != NULL && tmp->name != n)
+    {
+        prev = tmp;
+        tmp = tmp->next;
+    }
+
+    if (tmp == NULL)
+    {
+        cout << "Item " << n << " not found." << endl;
+        return;
+    }
+
+    prev->next = tmp->next;
+    delete tmp;
+}
+
+int main()
+{
+    tovar* tlist = NULL;
+
+    AddFirst(tlist, "суп", 50.0, 2);
+    AddLast(tlist, "каша", 30.0, 3);
+    AddAfter(tlist, "салат", 70.0, 1, "суп");
+
+    PrintList(tlist);
+
+    DelTovar(tlist, "каша");
+
+    cout << "After deletion:" << endl;
+    PrintList(tlist);
+
+    return 0;
+}
+
