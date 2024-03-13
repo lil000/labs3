@@ -1,169 +1,17 @@
-#include <iostream>
-#include <string>
-using namespace std;
+В XIX веке политический терроризм был широко распространен как в России, так и за ее пределами. Противники режима воспринимали террористические акты как средство борьбы за свои политические идеи и цели. Причины политического терроризма XIX века могут быть различными, но основными из них были желание изменить политический строй, борьба за независимость и свободу народа, а также недовольство действующим правительством и руководством.
 
-struct TovarNode {
-    wstring name; // Используем wstring вместо string для поддержки Unicode
-    TovarNode* next;
-};
+В России террористические группы и организации активно действовали в XIX веке. Одним из наиболее известных примеров является "Народная воля", которая проводила серию атак на членов царской семьи и правительственных чиновников. Одной из самых известных жертв террористов был император Александр II, которого взорвали бомбой в 1881 году.
 
-TovarNode* head = nullptr;
+Также в XIX веке политический терроризм был распространен в Европе, особенно в странах с авторитарными режимами. Во Франции, например, были активны террористические группы, борющиеся за установление республиканского правления. Великобритания также не была исключением, там террористические акты совершались как националистическими, так и социалистическими организациями.
 
-void addFirst(wstring name) {
-    TovarNode* newNode = new TovarNode;
-    newNode->name = name;
-    newNode->next = head;
-    head = newNode;
-}
+Политический терроризм XIX века имел серьезные последствия для общества и государства. Во-первых, он приводил к потерям жизней и разрушениям, что создавало напряженную и нестабильную обстановку. Во-вторых, террористические акты часто оправдывали использование силы и репрессий со стороны правительства, что могло привести к нарастанию политического конфликта и усилению репрессий.
 
-void addLast(wstring name) {
-    TovarNode* newNode = new TovarNode;
-    newNode->name = name;
-    newNode->next = nullptr;
+Таким образом, политический терроризм XIX века был серьезной угрозой для мира и стабильности. Этот феномен отражал сложные политические и социальные реалии того времени, а также стремление различных групп и организаций достичь своих целей с помощью насилия и угроз.
 
-    if (head == nullptr) {
-        head = newNode;
-        return;
-    }
+Один из примеров политического терроризма в XIX веке - это деятельность "Народной воли" в России. Эта организация была основана в 1879 году и боролась за свержение царского режима и установление конституционной монархии или даже республики. "Народная воля" использовала террористические методы, такие как атаки на чиновников и членов царской семьи.
 
-    TovarNode* current = head;
-    while (current->next != nullptr) {
-        current = current->next;
-    }
-    current->next = newNode;
-}
+Один из самых известных терактов, организованных "Народной волей", был убийство императора Александра II в 1881 году. Террористы спрятав бомбу в карете, смогли взорвать ее и убить царя во время проезда по улицам Петербурга. Этот акт терроризма имел серьезные последствия для политической ситуации в России и привел к ужесточению репрессий со стороны правительства.
 
-void addAfter(wstring name, wstring afterName) {
-    TovarNode* newNode = new TovarNode;
-    newNode->name = name;
+В Европе также были примеры политического терроризма в XIX веке. Например, во Франции республиканская группировка "Бланшисты" совершила несколько покушений на Маполеона III в 1858 году. Также в Италии были активны террористические группы, боровшиеся за единство и независимость страны от австрийского влияния.
 
-    if (head == nullptr) {
-        wcout << L"Список пуст" << endl;
-        return;
-    }
-
-    TovarNode* current = head;
-    while (current != nullptr && current->name != afterName) {
-        current = current->next;
-    }
-
-    if (current == nullptr) {
-        wcout << L"Элемент не найден" << endl;
-        return;
-    }
-
-    newNode->next = current->next;
-    current->next = newNode;
-}
-
-void addBefore(wstring name, wstring beforeName) {
-    TovarNode* newNode = new TovarNode;
-    newNode->name = name;
-
-    if (head == nullptr) {
-        wcout << L"Список пуст" << endl;
-        return;
-    }
-
-    if (head->name == beforeName) {
-        newNode->next = head;
-        head = newNode;
-        return;
-    }
-
-    TovarNode* current = head;
-    while (current->next != nullptr && current->next->name != beforeName) {
-        current = current->next;
-    }
-
-    if (current->next == nullptr) {
-        wcout << L"Элемент не найден" << endl;
-        return;
-    }
-
-    newNode->next = current->next;
-    current->next = newNode;
-}
-
-void deleteTovar(wstring name) {
-    if (head == nullptr) {
-        wcout << L"Список пуст" << endl;
-        return;
-    }
-
-    if (head->name == name) {
-        TovarNode* temp = head;
-        head = head->next;
-        delete temp;
-        return;
-    }
-
-    TovarNode* current = head;
-    while (current->next != nullptr && current->next->name != name) {
-        current = current->next;
-    }
-
-    if (current->next == nullptr) {
-        wcout << L"Элемент не найден" << endl;
-        return;
-    }
-
-    TovarNode* temp = current->next;
-    current->next = current->next->next;
-    delete temp;
-}
-
-void printList() {
-    if (head == nullptr) {
-        wcout << L"Список пуст" << endl;
-        return;
-    }
-
-    TovarNode* current = head;
-    while (current != nullptr) {
-        wcout << current->name << L" ";
-        current = current->next;
-    }
-    wcout << endl;
-}
-
-int main() {
-    wstring command, name, afterName, beforeName;
-
-    while (true) {
-        wcout << L"Введите команду (add_first, add_last, add_after, add_before, delete, print, exit): ";
-        getline(wcin, command); // Используем getline вместо cin >> для чтения строк с пробелами
-
-        if (command == L"add_first") {
-            wcout << L"Введите название: ";
-            getline(wcin, name);
-            addFirst(name);
-        } else if (command == L"add_last") {
-            wcout << L"Введите название: ";
-            getline(wcin, name);
-            addLast(name);
-        } else if (command == L"add_after") {
-            wcout << L"Введите название и после какого элемента: ";
-            getline(wcin, name);
-            getline(wcin, afterName);
-            addAfter(name, afterName);
-        } else if (command == L"add_before") {
-            wcout << L"Введите название и перед каким элементом: ";
-            getline(wcin, name);
-            getline(wcin, beforeName);
-            addBefore(name, beforeName);
-        } else if (command == L"delete") {
-            wcout << L"Введите название: ";
-            getline(wcin, name);
-            deleteTovar(name);
-        } else if (command == L"print") {
-            printList();
-        } else if (command == L"exit") {
-            break;
-        } else {
-            wcout << L"Неверная команда" << endl;
-        }
-    }
-
-    return 0;
-}
+В целом, политический терроризм XIX века не ограничивался одной страной или регионом, он проявлялся в различных частях мира как средство борьбы за политические идеалы и цели.
