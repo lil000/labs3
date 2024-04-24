@@ -1,42 +1,133 @@
-В XIX веке политический терроризм был широко распространен как в России, так и за ее пределами. Противники режима воспринимали террористические акты как средство борьбы за свои политические идеи и цели. Причины политического терроризма XIX века могут быть различными, но основными из них были желание изменить политический строй, борьба за независимость и свободу народа, а также недовольство действующим правительством и руководством.
+#include <iostream>
+#include <string>
 
-В России террористические группы и организации активно действовали в XIX веке. Одним из наиболее известных примеров является "Народная воля", которая проводила серию атак на членов царской семьи и правительственных чиновников. Одной из самых известных жертв террористов был император Александр II, которого взорвали бомбой в 1881 году.
+using namespace std;
 
-Также в XIX веке политический терроризм был распространен в Европе, особенно в странах с авторитарными режимами. Во Франции, например, были активны террористические группы, борющиеся за установление республиканского правления. Великобритания также не была исключением, там террористические акты совершались как националистическими, так и социалистическими организациями.
+struct Product {
+    string name;
+    int quantity;
+    double price;
+    Product* next;
+};
 
-Политический терроризм XIX века имел серьезные последствия для общества и государства. Во-первых, он приводил к потерям жизней и разрушениям, что создавало напряженную и нестабильную обстановку. Во-вторых, террористические акты часто оправдывали использование силы и репрессий со стороны правительства, что могло привести к нарастанию политического конфликта и усилению репрессий.
+// Функция для добавления товара в начало списка
+void addProductToStart(Product** head, string name, int quantity, double price) {
+    Product* newProduct = new Product();
+    newProduct->name = name;
+    newProduct->quantity = quantity;
+    newProduct->price = price;
+    newProduct->next = *head;
+    *head = newProduct;
+}
 
-Таким образом, политический терроризм XIX века был серьезной угрозой для мира и стабильности. Этот феномен отражал сложные политические и социальные реалии того времени, а также стремление различных групп и организаций достичь своих целей с помощью насилия и угроз.
+// Функция для добавления товара в конец списка
+void addProductToEnd(Product** head, string name, int quantity, double price) {
+    Product* newProduct = new Product();
+    newProduct->name = name;
+    newProduct->quantity = quantity;
+    newProduct->price = price;
+    newProduct->next = nullptr;
 
-Один из примеров политического терроризма в XIX веке - это деятельность "Народной воли" в России. Эта организация была основана в 1879 году и боролась за свержение царского режима и установление конституционной монархии или даже республики. "Народная воля" использовала террористические методы, такие как атаки на чиновников и членов царской семьи.
+    if (*head == nullptr) {
+        *head = newProduct;
+        return;
+    }
 
-Один из самых известных терактов, организованных "Народной волей", был убийство императора Александра II в 1881 году. Террористы спрятав бомбу в карете, смогли взорвать ее и убить царя во время проезда по улицам Петербурга. Этот акт терроризма имел серьезные последствия для политической ситуации в России и привел к ужесточению репрессий со стороны правительства.
+    Product* last = *head;
+    while (last->next != nullptr) {
+        last = last->next;
+    }
+    last->next = newProduct;
+}
 
-В Европе также были примеры политического терроризма в XIX веке. Например, во Франции республиканская группировка "Бланшисты" совершила несколько покушений на Маполеона III в 1858 году. Также в Италии были активны террористические группы, боровшиеся за единство и независимость страны от австрийского влияния.
+// Функция для добавления товара в список после заданного элемента
+void addProductAfter(Product* prevProduct, string name, int quantity, double price) {
+    if (prevProduct == nullptr) {
+        cout << "Previous product not found in the list." << endl;
+        return;
+    }
 
-В целом, политический терроризм XIX века не ограничивался одной страной или регионом, он проявлялся в различных частях мира как средство борьбы за политические идеалы и цели
-Написать компьютерную программу, содержащую
+    Product* newProduct = new Product();
+    newProduct->name = name;
+    newProduct->quantity = quantity;
+    newProduct->price = price;
+    newProduct->next = prevProduct->next;
+    prevProduct->next = newProduct;
+}
 
- - Описание структуры, содержащей поля типа string, int, double;
+// Функция для добавления товара в список перед заданным элементом
+void addProductBefore(Product** head, Product* nextProduct, string name, int quantity, double price) {
+    if (*head == nullptr || nextProduct == nullptr) {
+        cout << "Next product not found in the list." << endl;
+        return;
+    }
 
- - Набор функций для работы со списком на базе этой структуры:
+    Product* newProduct = new Product();
+    newProduct->name = name;
+    newProduct->quantity = quantity;
+    newProduct->price = price;
+    newProduct->next = nextProduct;
 
-     - Добавление элемента в начало списка;
+    Product* temp = *head;
+    while (temp->next != nextProduct) {
+        temp = temp->next;
+    }
+    temp->next = newProduct;
+}
 
-     - Добавление элемента в конец списка;
+// Функция для удаления из списка элемента с заданным именем
+void removeProduct(Product** head, string name) {
+    if (*head == nullptr) {
+        return;
+    }
 
-     - Добавление элемента в список после заданного элемента;
+    if ((*head)->name == name) {
+        Product* temp = *head;
+        *head = (*head)->next;
+        delete temp;
+        return;
+    }
 
-     - Добавление элемента в список перед заданным элементом;
+    Product* temp = *head;
+    while (temp->next != nullptr && temp->next->name != name) {
+        temp = temp->next;
+    }
 
-     - Удаление из списка элемента с заданным именем;
+    if (temp->next == nullptr) {
+        return;
+    }
 
-     - Вывод содержания списка на экран;
+    Product* toDelete = temp->next;
+    temp->next = temp->next->next;
+    delete toDelete;
+}
 
- - Функцию main, содержащую сценарий работы со списком, использующий разработанный инструментарий.
+// Функция для вывода содержания списка на экран
+void printList(Product* head) {
+    while (head != nullptr) {
+        cout << "Name: " << head->name << ", Quantity: " << head->quantity << ", Price: " << head->price << endl;
+        head = head->next;
+    }
+}
 
-Представить результаты в виде двух файлов:
+int main() {
+    Product* head = nullptr;
 
- - Компьютерная программа на С++;
+    // Добавление товаров в список
+    addProductToStart(&head, "Bread", 10, 2.5);
+    addProductToEnd(&head, "Milk", 20, 1.5);
+    addProductAfter(head, "Butter", 15, 3.0);
+    addProductBefore(&head, head->next, "Cheese", 25, 4.5);
 
- - Отчет о выполнении лабораторной работы с описанием алгоритма и структуры программы.
+    // Вывод содержания списка на экран
+    printList(head);
+
+    // Удаление товара из списка
+    removeProduct(&head, "Cheese");
+
+    // Вывод содержания списка на экран после удаления
+    cout << "List after removing Cheese:" << endl;
+    printList(head);
+
+    return 0;
+}
