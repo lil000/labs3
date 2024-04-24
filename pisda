@@ -1,25 +1,179 @@
-Доклад на тему "Политический терроризм XIX в. на примере России и зарубежных стран: причины и последствия"
+#include <iostream>
+#include <string>
+using namespace std;
 
-Введение
+struct Tovar {
+    string name;
+    int quantity;
+    double price;
+};
 
-В XIX веке политический терроризм стал одним из наиболее распространенных и эффективных методов борьбы оппозиции против правящих режимов. В этом докладе мы рассмотрим причины появления политического терроризма в XIX веке, а также его последствия, на примере России и зарубежных стран.
+struct TovarNode {
+    Tovar tovar;
+    TovarNode* next;
+};
 
-Причины появления политического терроризма в XIX веке
+struct TovarList {
+    TovarNode* head;
 
-Появление политического терроризма в XIX веке было обусловлено рядом причин. Во-первых, это было время демократических и националистических движений, которые стремились к свержению монархических и тоталитарных режимов. Политический терроризм стал одним из методов борьбы за свободу и независимость.
+    TovarList() : head(nullptr) {}
 
-Во-вторых, социальные неравенства и экономические проблемы также способствовали появлению политического терроризма. Большое количество голодающих и обездоленных людей искали способы изменить политическую систему и улучшить свое положение.
+    void addFirst(Tovar tovar) {
+        TovarNode* newNode = new TovarNode;
+        newNode->tovar = tovar;
+        newNode->next = head;
+        head = newNode;
+    }
 
-В-третьих, развитие технологий и коммуникаций в XIX веке также содействовало появлению политического терроризма. Благодаря усовершенствованным средствам связи и транспорта террористические группировки могли быстро и эффективно координировать свои действия.
+    void addLast(Tovar tovar) {
+        TovarNode* newNode = new TovarNode;
+        newNode->tovar = tovar;
+        newNode->next = nullptr;
 
-Последствия политического терроризма в XIX веке
+        if (head == nullptr) {
+            head = newNode;
+            return;
+        }
 
-Политический терроризм в XIX веке имел разнообразные последствия для общества и политической среды. Во-первых, он привел к усилению репрессий и ограничений со стороны правительств, что привело к усилению полицейского и контрразведывательного аппарата. Террористические акты также спровоцировали рост анти-террористической деятельности и ужесточение законодательства.
+        TovarNode* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
 
-Во-вторых, политический терроризм привел к обострению политических конфликтов и напряженности в обществе. Террористические акты ставили общество перед выбором – поддерживать правительство или оппозицию, что приводило к радикализации политических движений.
+    void addAfter(Tovar tovar, string afterName) {
+        TovarNode* newNode = new TovarNode;
+        newNode->tovar = tovar;
 
-В-третьих, политический терроризм оказал влияние на международные отношения и безопасность государств. Террористические организации часто действовали за границей, что создавало угрозу для международной стабильности.
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
 
-Заключение
+        TovarNode* current = head;
+        while (current != nullptr && current->tovar.name != afterName) {
+            current = current->next;
+        }
 
-В заключение хочется подчеркнуть, что политический терроризм в XIX веке был одним из наиболее серьезных вызовов для правящих режимов и общества в целом. Его причины и последствия остаются актуальными и в наше время, что подчеркивает важность принятия мер для предотвращения террористических актов и решения коренных проблем, лежащих в их основе.
+        if (current == nullptr) {
+            cout << "Item not found" << endl;
+            return;
+        }
+
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+
+    void addBefore(Tovar tovar, string beforeName) {
+        TovarNode* newNode = new TovarNode;
+        newNode->tovar = tovar;
+
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
+
+        if (head->tovar.name == beforeName) {
+            newNode->next = head;
+            head = newNode;
+            return;
+        }
+
+        TovarNode* current = head;
+        while (current->next != nullptr && current->next->tovar.name != beforeName) {
+            current = current->next;
+ }
+
+        if (current->next == nullptr) {
+            cout << "Item not found" << endl;
+            return;
+        }
+
+        newNode->next = current->next;
+        current->next = newNode;
+    }
+
+    void deleteTovar(string name) {
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
+
+        if (head->tovar.name == name) {
+            TovarNode* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        TovarNode* current = head;
+        while (current->next != nullptr && current->next->tovar.name != name) {
+            current = current->next;
+        }
+
+        if (current->next == nullptr) {
+            cout << "Item not found" << endl;
+            return;
+        }
+
+        TovarNode* temp = current->next;
+        current->next = current->next->next;
+        delete temp;
+    }
+
+    void printList() {
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
+
+        TovarNode* current = head;
+        while (current != nullptr) {
+            cout << "Name: " << current->tovar.name << ", Quantity: " << current->tovar.quantity << ", Price: " << current->tovar.price << endl;
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    TovarList tovarList;
+    Tovar tovar;
+    string command, afterName, beforeName;
+
+    while (true) {
+        cout << "Enter command (add_first, add_last, add_after, add_before, delete, print, exit): ";
+        cin >> command;
+
+        if (command == "add_first") {
+            cout << "Enter name, quantity, and price: ";
+            cin >> tovar.name >> tovar.quantity >> tovar.price;
+            tovarList.addFirst(tovar);
+        } else if (command == "add_last") {
+            cout << "Enter name, quantity, and price: ";
+            cin >> tovar.name >> tovar.quantity >> tovar.price;
+            tovarList.addLast(tovar);
+        } else if (command == "add_after") {
+            cout << "Enter name, quantity, and price, and after which item: ";
+            cin >> tovar.name >> tovar.quantity >> tovar.price >> afterName;
+            tovarList.addAfter(tovar, afterName);
+        } else if (command == "add_before") {
+            cout << "Enter name, quantity, and price, and before which item: ";
+            cin >> tovar.name >> tovar.quantity >> tovar.price >> beforeName;
+            tovarList.addBefore(tovar, beforeName);
+        } else if (command == "delete") {
+            cout << "Enter name: ";
+            cin >> tovar.name;
+            tovarList.deleteTovar(tovar.name);
+        } else if (command == "print") {
+            tovarList.printList();
+        } else if (command == "exit") {
+            break;
+        } else {
+            cout << "Invalid command" << endl;
+        }
+    }
+
+    return 0;
+}
