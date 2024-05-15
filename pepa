@@ -1,0 +1,86 @@
+#include<iostream>
+using namespace std;
+
+class vect {
+public:
+    int dim;
+    double v;
+    int num;
+    static int count;
+
+    vect(int d) {
+        dim = d;
+        v = new double[dim];
+        cout << "Vector created" << endl;
+        count++;
+        num = count;
+    }
+
+    vect(const vect &vec) {
+        dim = vec.dim;
+        v = new double[dim];
+        for (int i = 0; i < dim; i++) {
+            v[i] = vec.v[i];
+        }
+        cout << "Vector copied" << endl;
+        count++;
+        num = count;
+    }
+
+    ~vect() {
+        delete[] v;
+        cout << "Vector destroyed" << endl;
+        count--;
+    }
+};
+
+class matr {
+public:
+    int dim;
+    double a;
+
+    matr(int d) {
+        dim = d;
+        a = new doubledim;
+        for (int i = 0; i < dim; i++) {
+            ai = new doubledim;
+        }
+        cout << "Matrix created" << endl;
+    }
+
+    ~matr() {
+        for (int i = 0; i < dim; i++) {
+            delete ai;
+        }
+        delete a;
+        cout << "Matrix destroyed" << endl;
+    }
+};
+
+int vect::count = 0;
+
+vect operator+(vect vec1, vect vec2) {
+    vect result(vec1.dim);
+    for (int i = 0; i < vec1.dim; i++) {
+        result.vi = vec1.vi + vec2.vi;
+    }
+    cout << "Vectors added" << endl;
+    return result;
+}
+
+// Define other vector operations and matrix operations functions here
+
+int main() {
+    vect vec1(3);
+    vec1.v0 = 1;
+    vec1.v1 = 2;
+    vec1.v2 = 3;
+
+    vect vec2 = vec1;
+    vect vec3 = vec1 + vec2;
+
+    matr matrix(2);
+
+    return 0;
+}
+объясни этот код
